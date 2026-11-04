@@ -27,7 +27,10 @@
       '<div class="field"><span class="label">Sign in as</span><div class="hint-row">' + users.filter(function (u) { return ['USR-001', 'USR-002', 'USR-003'].indexOf(u.id) >= 0; }).map(function (u) { return '<button type="button" class="btn sm" data-as="' + A.esc(u.email) + '">' + A.esc(u.name) + ' · ' + A.esc(A.M && window.MTRDATA.ROLE_NAMES[u.role]) + '</button>'; }).join('') + '</div></div>');
     var f = A.q('form', main), em = A.q('#email', main), pw = A.q('#password', main);
     A.q('[data-toggle]', main).addEventListener('click', function () { pw.type = pw.type === 'password' ? 'text' : 'password'; });
-    A.qa('[data-as]', main).forEach(function (b) { b.addEventListener('click', function () { em.value = b.getAttribute('data-as'); em.focus(); }); });
+    var mark = function () { A.qa('[data-as]', main).forEach(function (x) { var on = x.getAttribute('data-as') === em.value.trim().toLowerCase(); x.setAttribute('aria-pressed', String(on)); x.classList.toggle('pri', on); }); };
+    A.qa('[data-as]', main).forEach(function (b) { b.addEventListener('click', function () { em.value = b.getAttribute('data-as'); mark(); em.focus(); }); });
+    em.addEventListener('input', mark);
+    mark();
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       var v = em.value.trim().toLowerCase();

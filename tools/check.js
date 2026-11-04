@@ -53,6 +53,7 @@ let problems = 0;
         document.querySelectorAll(sel).forEach((e, i) => {
           if (e.offsetParent === null) return;
           if (e.getAttribute('aria-current') === 'page') return;   // the menu item of the screen you are on
+          if (e.tagName === 'A' && e.href.split('?')[0] === location.href.split('?')[0]) return;   // a link to this same screen
           const row = e.closest('tbody tr');
           const sig = e.tagName + '|' + (e.getAttribute('data-act') || e.getAttribute('data-bact') || e.getAttribute('data-cr') || e.getAttribute('data-ua') || '') + '|' + (row ? 'row' : '') + '|' + e.textContent.trim().replace(/\d+/g, '#').slice(0, 40) + '|' + (e.tagName === 'A' ? e.getAttribute('href').split('?')[0] : '');
           if (seen[sig]) return; seen[sig] = 1;
